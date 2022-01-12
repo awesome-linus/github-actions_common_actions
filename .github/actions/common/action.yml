@@ -1,0 +1,10 @@
+name: Common Action
+description: Call Common Hello World
+runs:
+  using: "composite"
+  steps:
+    - name: Call Hello World From Common Action
+      uses: docker://alpine:latest
+      with:
+        entrypoint: /bin/echo
+        args: Hello, World From Common Action!

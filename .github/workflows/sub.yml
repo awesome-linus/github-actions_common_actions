@@ -1,0 +1,28 @@
+name: Sub Action
+on: workflow_dispatch
+
+jobs:
+  sub:
+    name: Hello World
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Hello World
+        uses: docker://alpine:latest
+        with:
+          entrypoint: /bin/echo
+          args: Hello, World!
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Call Hello World From Common
+        uses: ./.github/actions/common
+
+      - name: Call Hello World From Common With Input
+        id: hello-world-with-input-result
+        uses: ./.github/actions/common_with_input
+        with:
+          who: 'Hoge'
+      - name: Output Hello World From Common With Input
+        run: echo ${{ steps.hello-world-with-input-result.outputs.hello-world }}
+        shell: bash

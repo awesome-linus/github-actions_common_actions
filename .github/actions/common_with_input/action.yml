@@ -1,0 +1,29 @@
+name: Common Action With Input
+description: Call Common Hello World With Input
+inputs:
+  who:
+    description: 'Who'
+    required: true
+    default: 'Me'
+outputs:
+  hello-world:
+    description: "Hello World With Input"
+    value: ${{ steps.hello-world-output.outputs.hello-output }}
+runs:
+  using: "composite"
+  steps:
+    - id: hello-world-generator
+      run: |
+        HELLO_ENV="Hello, World From ${{ inputs.who }}!"
+        echo "::set-output name=hello-env-output::$(echo $HELLO_ENV)"
+      shell: bash
+
+    - name: test
+      run: echo ${{ steps.hello-world-generator.outputs.hello-env-output }}
+      shell: bash
+
+    - id: hello-world-output
+      run: |
+        HELLO_OUTPUT="${{ steps.hello-world-generator.outputs.hello-env-output }}"
+        echo "::set-output name=hello-output::$(echo $HELLO_OUTPUT)"
+      shell: bash
